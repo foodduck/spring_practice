@@ -1,0 +1,52 @@
+
+12/30에 ex02로 대체했다.
+
+
+create table board2 (
+    bno number not null primary key --게시물번호
+    ,title varchar2(200) not null  --게시물제목
+    ,content varchar2(4000) --게시물내용
+    ,writer varchar2(50) not null --게시물작성자
+    ,regdate date default sysdate --게시물작성일자
+    ,viewcnt number default 0 --게시물조회수
+);
+
+--더미 데이터 120개 자동 추가하기(선언문:범위지정->스크립트 실행)
+declare 
+i number :=1; 
+begin
+while i<=120 loop
+insert into board2 (bno, title, content, writer) values
+((select nvl(max(bno)+1, 1) from board2) ,'제목'||i,'내용'||i,'kim');
+i :=i+1;
+end loop;
+end;
+/
+
+
+
+
+
+
+-- 회원테이블 만들기
+create table member2(
+    userid varchar2(100) not null primary key --사용자아이디
+    ,passwd varchar2(500) not null --비밀번호
+    ,name varchar2(100) --이름
+    ,email varchar2(200) not null --이메일
+    ,regdate date default sysdate --가입일
+);
+
+--더미 회원 추가
+insert into member2(userid, passwd, name, email) values
+('admin', '1234', '관리자', 'kkt09072@naver.com');
+
+insert into member2(userid, passwd, name, email) values
+('kwak', '1234', '곽규석', 'kks443@naver.com');
+
+insert into member2(userid, passwd, name, email) values
+('park', '1234', '박철수', 'pcs121@naver.com');
+
+select * from board2
+select * from member2
+commit;

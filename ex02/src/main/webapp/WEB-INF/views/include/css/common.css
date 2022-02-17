@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+.footer { background-color:#1f2330; color:#ececec; }
+.footer strong { color:#fff; }
+.footer a:hover { color:deepskyblue; }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring 
+		http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- 오라클 연동/연결 드라이버 로딩 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="url"
+			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>
+		<property name="username" value="system"></property>
+		<property name="password" value="1234"></property>
+	</bean>
+	
+	<!-- MySQL 연동/연결 드라이버 로딩 -->
+<!-- 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver"></property>
+		<property name="url"
+			value="jdbc:mysql://localhost:3306:DB명"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="1234"></property>
+	</bean> -->
+
+	<!-- Maria 연동/연결 드라이버 로딩 -->
+	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass"
+			value="org.mariadb.jdbc.Driver"></property>
+		<property name="url"
+			value="jdbc:mariadb://localhost:3306/데이터베이스명"></property>
+		<property name="username" value="아이디"></property>
+		<property name="password" value="비밀번호"></property>
+	</bean> -->
+	
+	<!-- 오라클을 아파치 DBCP를 활용하여 연동할 경우 설정 -->
+<!-- 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver"></property>
+		<property name="url"
+			value="jdbc:oracle:thin:@localhost:1521:XE"></property>
+		<property name="username" value="system"></property>
+		<property name="password" value="1234"></property>
+	</bean>	 -->	
+	
+<!-- 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="jdbcUrl"
+			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>
+		<property name="username" value="system"></property>
+		<property name="password" value="1234"></property>
+	</bean>
+
+	HikariCP configuration
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean> -->
+	
+	<!-- 사용할 DB의 SqlSessionFactory 객체 주입 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- mybatis 설정파일의 경로 -->
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+		<!-- mybatis mapper 파일의 경로 -->
+		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>
+	</bean>
+	<!-- SqlSession 객체 주입 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg name ="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	
+	<mybatis-spring:scan
+		base-package="com.project3.controller.mapper" />
+
+	<context:component-scan
+		base-package="com.project3.controller.sample"></context:component-scan>
+</beans>
+<!-- 어느 하나의 시스템에 접목(의존)될 수 있도록 지정하도록 하는 것이 의존성 주입(DI)
+기존 시스템은 의존성 주입을 일일이 개발자가 정하도록 되어 있어 유지보수나 개발 프로세스상에 문제가 발생 될 수 있기 때문에
+설정내용과 무관하게 시스템이 알아서 변경하여 처리될 수 있도록 정하는 것을 IOC(제어의 역전) 라고 함. -->

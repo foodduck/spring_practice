@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 게시판 관련 mybatis -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<!-- 글목록: board.boardList -->
+	<select id="boardList" resultType="com.project3.dto.BoardDTO">
+		select bno, title, writer, regdate, viewcnt
+		from board2 order by bno desc
+	</select>
+	<!-- <selectOne>
+		 1건만 불러올 때
+	</selectOne> -->
+	<!-- <insert>
+		 삽입
+	</insert> -->
+	<!-- <update>
+		업데이트
+	</update> -->
+	<!-- <delete>
+		삭제
+	</delete> -->
+</mapper>

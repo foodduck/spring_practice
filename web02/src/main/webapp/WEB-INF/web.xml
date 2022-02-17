@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns="http://java.sun.com/xml/ns/javaee" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <!-- 스프링 환경설정 로딩 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <!-- 제일 먼저 root-context 파일을 로딩하도옥 함 -->
+    <param-value>/WEB-INF/spring/root-context.xml</param-value>
+  </context-param>
+  <!-- 위에서 선언한 Context설정에 필요한 리스너 클래스를 로딩하여 WebApplicationContext를 만듦 -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!-- 서블릿 환경 설정 -->
+  <servlet>
+    <servlet-name>appServlet</servlet-name>
+    <!-- Dispatcher의 내장된 서블릿을 로딩함 -->
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <!-- servlet-context 파일에서 설정한 내용과 객체 정보를 불러옴 -->
+      <param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+    </init-param>
+    <!-- 시작 페이지인 메인 페이지의 로딩 순서를 첫 번째로 지정함 -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>appServlet</servlet-name>
+    <!-- url 패턴을 / 로 하면 DispatcherServlet이 모든 요청을 메인 페이지로 돌려준다. -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <filter-name>encoding</filter-name>
+    <filter-class>org.springframework.web.filterCharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encoding</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>BoardController</display-name>
+    <servlet-name>BoardController</servlet-name>
+    <servlet-class>com.project3.controller.BoardController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BoardController</servlet-name>
+    <url-pattern>/BoardController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MemberController</display-name>
+    <servlet-name>MemberController</servlet-name>
+    <servlet-class>com.project3.controller.MemberController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MemberController</servlet-name>
+    <url-pattern>/MemberController</url-pattern>
+  </servlet-mapping>
+</web-app>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="member">
+	<!-- 회원목록 불러오기 -->
+	<select id="memberList">
+		select userid, passwd, name, email, regdate from member2 order by userid desc
+	</select>
+	<!-- 회원정보 상세보기 -->
+	<select id="memberRead" resultType="com.member.example.dto.BoardDTO">
+		select userid, passwd, content, content, name, email, regdate from member2 
+		where userid=#{member.userid}
+	</select>
+	<!-- 회원가입 -->
+	<insert id="memberJoin">
+		insert into member2(userid, passwd, name, email, regdate) values 
+		(#{member.userid}, #{member.passwd}, #{member.name}, #{member.email}, sysdate)
+	</insert>
+	<!-- 게시글 수정하기 -->
+	<update id="memberUpdate">
+		update member2 set passwd=${member.passwd}, name=${member.name}, email=sysdate 
+		email=#{email} where userid=${member.userid}
+	</update>
+	<!-- 게시글 삭제하기 -->
+	<delete id="memberDelete">
+		delete from member2 where userid=${member.userid}
+	</delete>
+</mapper>
